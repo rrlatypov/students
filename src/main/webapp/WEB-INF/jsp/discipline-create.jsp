@@ -75,6 +75,7 @@
 </main>
 <aside class="logout">
     <a href="#" class="logout-btn">logout</a>
+    //комментарий (фонарно)
 
 </aside>
 
