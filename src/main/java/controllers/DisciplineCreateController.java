@@ -23,11 +23,12 @@ public class DisciplineCreateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String discip = req.getParameter("newDiscip");
-        if (discip == null) {
+        if (discip == null || discip.equals("")) {
             req.setAttribute("message", "1");
             req.setAttribute("isCreate", "1");
             req.setAttribute("currentPage", "discipline-create.jsp");
             req.getRequestDispatcher("WEB-INF/jsp/discipline-create.jsp").forward(req, resp);
+            return;
 
         }
 

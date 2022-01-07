@@ -63,6 +63,14 @@
                 <input type="submit" value=" применить" class="field">
             </c:otherwise>
         </c:choose>
+            <c:choose>
+                <c:when test="${message==1}">
+                    <br>
+                    <h3> поля не должны быть пустыми </h3>
+                </c:when>
+
+
+            </c:choose>
 
 
 

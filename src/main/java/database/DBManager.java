@@ -4,53 +4,38 @@ import constants.Constants;
 import entity.Discipline;
 import entity.Student;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DBManager {
-    public static void main(String[] args) {
+    private static Connection conn;
+    private static PreparedStatement createNewDiscip;
+    private static PreparedStatement deleteDiscip;
+
+    static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(Constants.PATH_TO_DATABASE);
-            System.out.println("ура");
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM student");
-            ArrayList<Student> students = new ArrayList<Student>();
-            while (rs.next()) {
-                Student student = new Student();
-                student.setId(rs.getInt("id"));
-                student.setName(rs.getString("name"));
-                student.setSername(rs.getString("sername"));
-                student.setGroup(rs.getString("group"));
-                student.setDate(rs.getDate("data"));
-                students.add(student);
-            }
-            for (Student s : students) {
-                System.out.println(s);
-            }
+            conn = DriverManager.getConnection(Constants.PATH_TO_DATABASE);
+            createNewDiscip = conn.prepareStatement("INSERT INTO`discipline` (`discipline`) VALUES ('?');");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void createNewDiscip(String discip) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(Constants.PATH_TO_DATABASE);
-            System.out.println("ура");
-            Statement stmt = conn.createStatement();
-            stmt.execute("INSERT INTO`discipline` (`discipline`) VALUES ('" + discip + "');");
+            createNewDiscip.setString(1, discip);
+            createNewDiscip.execute();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    public static ArrayList<Discipline> getAllActiveDiscipline () {
+
+    public static ArrayList<Discipline> getAllActiveDiscipline() {
         ArrayList<Discipline> disciplines = new ArrayList<Discipline>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -86,7 +71,8 @@ public class DBManager {
         }
 
     }
-    public static Discipline getDisciplineById (String id){
+
+    public static Discipline getDisciplineById(String id) {
         Discipline discipline = new Discipline();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -121,5 +107,26 @@ public class DBManager {
         }
 
 
+    }
+
+    public static boolean isExistUser(String login, String password, String role) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(Constants.PATH_TO_DATABASE);
+
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user_role as ur\n" +
+                    "left join user as u on ur.id_user = u.id\n" +
+                    "where u.login = '" + login + "' and u.password = '" + password + "' and ur.id_role = " + role);
+
+
+            while (rs.next()) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

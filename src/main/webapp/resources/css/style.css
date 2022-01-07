@@ -19,6 +19,13 @@ body {
     text-align: center;
     margin-bottom: 2rem;
 }
+.main-heading-title {
+    border: 2px solid #000;
+    padding: 0.5rem 0.1rem;
+    text-align: center;
+    margin: 2rem 10rem ;
+
+}
 .heading-secondary {
     margin-top: 2rem;
     margin-bottom: 1rem;
